@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Git Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/branch']], extensions: [], userRemoteConfigs: [[credentialsId: ‘credential-id', url: 'ssh git url']]])
+
+            }
+        }
+        stage('create zip of python-transcript') {
+            steps {
+                sh 'rm -rf .git && zip -r hark-python-transcript.zip .'   	# remove .git and create zip of recent checkout python code 
+            }
+        }
+        stage('S3 Downloads') {
+            steps {
+                sh 'aws s3 cp s3://bucket-name/transcript-jenkins-shell.sh .'    
+            }
+        }
+        
+        stage('Sent zip to python-transcript') {
+            steps {                                              # bash script run on jenkins instance to deploy application to standalone instance
+                sh 'bash transcript-jenkins-shell.sh' 			 # run jenkins bash script
+            }
+        }
+    }
+}
