@@ -1,0 +1,19 @@
+aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name asg-name | grep -i instanceid | awk '{ print $2}' | cut -d',' -f1| sed -e 's/"//g'
+
+This command extracts and cleans up the instance IDs associated with the specified Auto Scaling Group. :-
+aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name asg-name: This AWS CLI command describes the details of the specified Auto Scaling Group named asg-name.
+ grep -i instanceid :- This part of the command filters the output to lines containing the string "instanceid", ignoring case (-i option) to handle variations like "InstanceId" or "instanceid".
+ awk '{ print $2}' :- After grep filters the lines, awk is used to extract the second column ($2) from each line. This should contain the instance IDs.
+ cut -d',' -f1 :- This cut command then cuts the extracted text using , as the delimiter (-d',') and retains the first field (-f1). This is useful if there's any additional information present in the output.
+ sed -e 's/"//g' :- Finally, sed is used to remove any double quotes (") from the output. This is often necessary since AWS CLI commands tend to enclose values in double quotes.
+
+
+aws ec2 describe-instances --instance-ids $i | grep -i PrivateIpAddress | awk '{ print $2 }' | head -1 | cut -d"," -f1 | cut -d'"' -f2
+
+This command retrieves the private IP address of an EC2 instance with a specific instance ID ($i). Let's break it down:
+aws ec2 describe-instances --instance-ids $i: This AWS CLI command describes the details of the specified EC2 instance identified by the instance ID $i.
+ grep -i PrivateIpAddress: This part of the command filters the output to lines containing the string "PrivateIpAddress", ignoring case (-i option). This line contains the private IP address of the instance.
+ awk '{ print $2 }': After grep filters the lines, awk is used to extract the second column ($2) from each line. This should contain the private IP address value.
+ head -1: This part ensures that only the first line is taken into account, in case there are multiple Private IP addresses associated with the instance (although this is rare).
+ cut -d"," -f1: This cut command then cuts the extracted text using , as the delimiter (-d',') and retains the first field (-f1). This is useful if there's any additional information present in the output.
+ cut -d'"' -f2: Finally, another cut command is used to cut the extracted text using " as the delimiter (-d'"') and retains the second field (-f2). This removes any quotation marks around the private IP address.
