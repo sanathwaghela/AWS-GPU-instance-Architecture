@@ -16,13 +16,13 @@
             }
             stage('S3 Downloads') {
                 steps {
-                    sh 'aws s3 cp s3://bucket-name/<script_name>.sh .'    # jenkins-script.sh
+                    sh 'aws s3 cp s3://bucket-name/jenkins-script.sh .'    # jenkins-script.sh
                 }
             }
             
             stage('Sent zip to instance with help of script') {
                 steps {                                              # bash script run on jenkins instance to deploy application to standalone instance
-                    sh 'bash <script_name>.sh' 			             # run jenkins bash script
+                    sh 'bash jenkins-script.sh' 			             # run jenkins bash script
                 }
             }
         }
