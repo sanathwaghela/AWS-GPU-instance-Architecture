@@ -16,7 +16,7 @@
             }
             stage('S3 Downloads') {
                 steps {
-                    sh 'aws s3 cp s3://bucket-name/<script_name>.sh .'    
+                    sh 'aws s3 cp s3://bucket-name/<script_name>.sh .'    # jenkins-script.sh
                 }
             }
             
