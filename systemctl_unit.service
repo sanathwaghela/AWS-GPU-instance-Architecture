@@ -1,10 +1,10 @@
 [Unit]
-Description=Python transcript Script Service
+Description=Script Service
 After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/ubuntu/hark-python-transcript/audio_transcript.py > /home/ubuntu/hark-python-transcript/audio_transcript.log &
+ExecStart=/usr/bin/python3 /home/ubuntu/<source_filename>.py > /home/ubuntu/<Log_file_name>.log &
 User=root
 Restart=always
 
